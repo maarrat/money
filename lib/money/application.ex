@@ -22,7 +22,9 @@ defmodule Money.Application do
   defp start_exchange_rate_service? do
     start? = Money.get_env(:exchange_rate_service, @start_service_by_default?)
     api_module = ExchangeRates.default_config().api_module
+    Logger.debug "Exchange rate module is #{inspect api_module}"
     api_module_present? = Code.ensure_loaded?(api_module)
+    Logger.debug "Api_module is loaded? #{inspect api_module_present?}"
 
     if start? && !api_module_present? do
       Logger.error "ExchangeRates api module #{api_module_name(api_module)} could not be loaded. " <>

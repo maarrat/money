@@ -28,6 +28,8 @@ defmodule Money.ExchangeRates.OpenExchangeRates do
 
   @open_exchange_rate_url "https://openexchangerates.org/api"
 
+  require Logger
+
   @doc """
   Update the retriever configuration to include the requirements
   for Open Exchange Rates.  This function is invoked when the
@@ -43,7 +45,9 @@ defmodule Money.ExchangeRates.OpenExchangeRates do
   def init(default_config) do
     url    = Money.get_env(:open_exchange_rates_url, @open_exchange_rate_url)
     app_id = Money.get_env(:open_exchange_rates_app_id, nil)
-    Map.put(default_config, :retriever_options, %{url: url, app_id: app_id})
+    config = Map.put(default_config, :retriever_options, %{url: url, app_id: app_id})
+    Logger.debug "OXR: Init config is #{inspect config}"
+    config
   end
 
   @doc """
@@ -65,6 +69,7 @@ defmodule Money.ExchangeRates.OpenExchangeRates do
   """
   @spec get_latest_rates(Money.ExchangeRates.Config.t) :: {:ok, Map.t} | {:error, String.t}
   def get_latest_rates(config) do
+    Logger.debug "OXR: get_latest_rates config: #{inspect config}"
     url = config.retriever_options.url
     app_id = config.retriever_options.app_id
     retrieve_latest_rates(url, app_id)

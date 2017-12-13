@@ -21,6 +21,7 @@ defmodule Money.ExchangeRates.Retriever do
   alias Money.ExchangeRates
 
   def start_link(name, config) do
+    Logger.debug "Retriever start_link.  Config is #{inspect config}"
     GenServer.start_link(__MODULE__, config, name: name)
   end
 
